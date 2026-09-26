@@ -15,7 +15,31 @@ export const fetchFromDb = async () => {
     const res = await fetch(`${url}?action=getAll`);
     const json = await res.json();
     if (json.success) {
-      return json.data;
+      // Traverse data and convert stringified numbers to real numbers
+      const traverseAndParse = (obj: any): any => {
+        if (Array.isArray(obj)) return obj.map(traverseAndParse);
+        if (obj !== null && typeof obj === 'object') {
+          for (const key in obj) {
+            obj[key] = traverseAndParse(obj[key]);
+          }
+          return obj;
+        }
+        if (typeof obj === 'string') {
+          // Check if string is a valid number, but skip purely numeric identifiers if you want 
+          // (Actually, price/deposit are clearly numbers. Let's cast strict numeric formats).
+          const num = Number(obj);
+          if (!isNaN(num) && obj.trim() !== '') {
+            // Be careful not to convert phone numbers like "+1555" to numbers. 
+            // Only purely numerical values that aren't zero-padded strings or phones.
+            if (!obj.startsWith('0') && !obj.startsWith('+') && !obj.includes('-') && !obj.includes(' ') && !isNaN(parseFloat(obj))) {
+              return num;
+            }
+          }
+        }
+        return obj;
+      };
+      
+      return traverseAndParse(json.data);
     }
   } catch (error) {
     console.error("Error fetching from DB:", error);

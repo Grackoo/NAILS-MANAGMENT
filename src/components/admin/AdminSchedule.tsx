@@ -39,11 +39,11 @@ export const AdminSchedule: React.FC = () => {
 
   const estimatedRevenue = appointments
     .filter((a) => a.status === 'confirmada' || a.status === 'en_proceso')
-    .reduce((acc, curr) => acc + curr.price, 0);
+    .reduce((acc, curr) => acc + Number(curr.price || 0), 0);
 
   const collectedDeposits = appointments
     .filter((a) => a.status === 'confirmada' || a.status === 'en_proceso')
-    .reduce((acc, curr) => acc + (curr.depositPaid || 0), 0);
+    .reduce((acc, curr) => acc + Number(curr.depositPaid || 0), 0);
 
   // Filtering
   const filteredAppointments = appointments.filter((apt) => {
@@ -525,10 +525,10 @@ export const AdminSchedule: React.FC = () => {
                     {/* Price & Deposit */}
                     <td className="py-3.5 px-4 align-middle">
                       <div className="flex flex-col">
-                        <span className="font-bold text-[#1c1b1a]">${apt.price.toFixed(2)}</span>
+                        <span className="font-bold text-[#1c1b1a]">${Number(apt.price || 0).toFixed(2)}</span>
                         {apt.depositPaid ? (
                           <span className="text-[10px] text-[#725b38] font-semibold">
-                            Seña: ${apt.depositPaid.toFixed(2)} (50%)
+                            Seña: ${Number(apt.depositPaid || 0).toFixed(2)} (50%)
                           </span>
                         ) : (
                           <span className="text-[10px] text-[#4c4640]">Pago en Salón</span>
