@@ -1,0 +1,6 @@
+{
+  "name": "L'Atelier Vernis",
+  "description": "Plataforma de alta estética y salón boutique de manicura de autor, agendamiento de citas y consola administrativa.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
