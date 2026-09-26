@@ -16,10 +16,15 @@ import { AdminWaitlist } from './components/admin/AdminWaitlist';
 import { AdminReviewsModeration } from './components/admin/AdminReviewsModeration';
 import { ClientNotificationSettings } from './components/client/ClientNotificationSettings';
 import { ClientLoyaltyProgram } from './components/client/ClientLoyaltyProgram';
-import { FreedSlotModal } from './components/modals/FreedSlotModal';
+import { LoginScreen } from './components/auth/LoginScreen';
 
 const AppContent: React.FC = () => {
-  const { role, clientTab, adminTab, setAdminTab, viewportMode, waitlist, freedSlotAlert, setFreedSlotAlert, reviews } = useStudio();
+  const { isAuthenticated, role, clientTab, adminTab, setAdminTab, viewportMode, waitlist, freedSlotAlert, setFreedSlotAlert, reviews } = useStudio();
+
+  // If not authenticated, show login screen
+  if (!isAuthenticated) {
+    return <LoginScreen />;
+  }
 
   // Count pending reviews for badge
   const pendingReviewsCount = reviews.filter((r) => r.status === 'pendiente').length;

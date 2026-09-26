@@ -13,6 +13,8 @@ export const Header: React.FC = () => {
     adminTab,
     clientNotificationPreferences,
     loyaltyProfile,
+    setIsAuthenticated,
+    setCurrentClient,
   } = useStudio();
 
   const getSubTitle = () => {
@@ -172,34 +174,20 @@ export const Header: React.FC = () => {
             </div>
           </div>
 
-          {/* Sub Row: Mode Segmented Switcher (Vista Cliente vs Administración) */}
+          {/* Removed Sub Row: Mode Segmented Switcher. User is locked into their role. */}
           <div className="flex items-center justify-center w-full pt-0.5">
-            <div className="inline-flex items-center p-1 rounded-full bg-[#f2edea] border border-[#cec5bd]/40 shadow-inner">
-              <button
-                type="button"
-                onClick={() => setRole('client')}
-                className={`min-h-[32px] px-5 py-1 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 ${
-                  role === 'client'
-                    ? 'bg-[#1e1b18] text-white shadow-sm ring-1 ring-black/10'
-                    : 'text-[#4c4640] hover:text-[#1c1b1a]'
-                }`}
-              >
-                <span className="material-symbols-outlined text-[16px]">person</span>
-                <span>Vista Cliente</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setRole('admin')}
-                className={`min-h-[32px] px-5 py-1 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 ${
-                  role === 'admin'
-                    ? 'bg-[#1e1b18] text-white shadow-sm ring-1 ring-black/10'
-                    : 'text-[#4c4640] hover:text-[#1c1b1a]'
-                }`}
-              >
-                <span className="material-symbols-outlined text-[16px]">admin_panel_settings</span>
-                <span>Administración</span>
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setIsAuthenticated(false);
+                setCurrentClient(null);
+                setRole('client');
+              }}
+              className="text-xs text-[#725b38] hover:text-[#584323] font-bold uppercase tracking-wider flex items-center gap-1 transition-colors"
+            >
+              <span className="material-symbols-outlined text-[16px]">logout</span>
+              Cerrar Sesión
+            </button>
           </div>
         </div>
       </div>

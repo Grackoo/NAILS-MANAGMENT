@@ -20,6 +20,7 @@ export const BookingFlow: React.FC = () => {
     setActiveAppliedCoupon,
     redeemCoupon,
     addLoyaltyPoints,
+    currentClient,
   } = useStudio();
 
   // Loyalty Points Discount State
@@ -38,8 +39,8 @@ export const BookingFlow: React.FC = () => {
   const [selectedSpecialistId, setSelectedSpecialistId] = useState<string>('valeria');
 
   // Client form inputs
-  const [clientName, setClientName] = useState<string>('Elena Rostova');
-  const [clientPhone, setClientPhone] = useState<string>('+1 (555) 349-8821');
+  const [clientName, setClientName] = useState<string>(currentClient?.name || '');
+  const [clientPhone, setClientPhone] = useState<string>(currentClient?.phone || '');
   const [clientNotes, setClientNotes] = useState<string>('');
 
   // Modal & loading state

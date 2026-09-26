@@ -32,6 +32,11 @@ import {
 } from '../data/mockData';
 
 interface StudioContextType {
+  isAuthenticated: boolean;
+  setIsAuthenticated: (val: boolean) => void;
+  currentClient: ClientProfile | null;
+  setCurrentClient: (client: ClientProfile | null) => void;
+  loginAsClient: (phone: string, name?: string) => void;
   role: Role;
   setRole: (role: Role) => void;
   clientTab: ClientTab;
@@ -89,6 +94,12 @@ interface StudioContextType {
 const StudioContext = createContext<StudioContextType | undefined>(undefined);
 
 export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => localStorage.getItem('latelier_auth') === 'true');
+  const [currentClient, setCurrentClient] = useState<ClientProfile | null>(() => {
+    const saved = localStorage.getItem('latelier_current_client');
+    return saved ? JSON.parse(saved) : null;
+  });
+
   const [role, setRoleState] = useState<Role>(() => {
     return (localStorage.getItem('latelier_role') as Role) || 'client';
   });
@@ -161,6 +172,34 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     localStorage.setItem('latelier_role', role);
   }, [role]);
+
+  useEffect(() => {
+    localStorage.setItem('latelier_auth', String(isAuthenticated));
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    localStorage.setItem('latelier_current_client', JSON.stringify(currentClient));
+  }, [currentClient]);
+
+  const loginAsClient = (phone: string, name?: string) => {
+    let existing = clients.find(c => c.phone === phone);
+    if (!existing) {
+      existing = {
+        id: `cl-${Date.now()}`,
+        name: name || 'Nueva Clienta',
+        phone,
+        totalVisits: 0,
+        notes: 'Clienta registrada por login',
+        lastVisit: '-',
+        favoriteTechnique: 'A definir',
+        favoriteColor: 'N/A'
+      };
+      setClients(prev => [existing!, ...prev]);
+    }
+    setCurrentClient(existing);
+    setRoleState('client');
+    setIsAuthenticated(true);
+  };
 
   useEffect(() => {
     localStorage.setItem('latelier_services', JSON.stringify(services));
@@ -769,6 +808,11 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   return (
     <StudioContext.Provider
       value={{
+        isAuthenticated,
+        setIsAuthenticated,
+        currentClient,
+        setCurrentClient,
+        loginAsClient,
         role,
         setRole,
         clientTab,
