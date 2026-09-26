@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { fetchFromDb, syncToDb } from './sync';
 import {
   Role,
   ClientTab,
@@ -163,14 +164,17 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   useEffect(() => {
     localStorage.setItem('latelier_services', JSON.stringify(services));
+    syncToDb('syncServices', services);
   }, [services]);
 
   useEffect(() => {
     localStorage.setItem('latelier_appointments', JSON.stringify(appointments));
+    syncToDb('syncAppointments', appointments);
   }, [appointments]);
 
   useEffect(() => {
     localStorage.setItem('latelier_clients', JSON.stringify(clients));
+    syncToDb('syncClients', clients);
   }, [clients]);
 
   useEffect(() => {
@@ -179,6 +183,7 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   useEffect(() => {
     localStorage.setItem('latelier_waitlist', JSON.stringify(waitlist));
+    syncToDb('syncWaitlist', waitlist);
   }, [waitlist]);
 
   useEffect(() => {
@@ -199,7 +204,22 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   useEffect(() => {
     localStorage.setItem('latelier_reviews', JSON.stringify(reviews));
+    syncToDb('syncReviews', reviews);
   }, [reviews]);
+
+  // Initial load from DB
+  useEffect(() => {
+    fetchFromDb().then(data => {
+      if (data) {
+        if (data.appointments?.length > 0) setAppointments(data.appointments);
+        if (data.clients?.length > 0) setClients(data.clients);
+        if (data.waitlist?.length > 0) setWaitlist(data.waitlist);
+        if (data.reviews?.length > 0) setReviews(data.reviews);
+        if (data.services?.length > 0) setServices(data.services);
+      }
+    });
+  }, []);
+
 
   // Submit client post-service review with photos
   const addReview = (reviewData: Omit<ServiceReview, 'id' | 'dateStr' | 'status'>): ServiceReview => {
