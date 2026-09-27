@@ -435,7 +435,6 @@ export const INITIAL_WAITLIST: WaitlistEntry[] = [
 ];
 
 export const AVAILABLE_REWARD_COUPONS: LoyaltyRewardCoupon[] = [
-export const AVAILABLE_REWARD_COUPONS: LoyaltyRewardCoupon[] = [
   {
     id: 'rew-1',
     title: 'Bono Belleza Express',
