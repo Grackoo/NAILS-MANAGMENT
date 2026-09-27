@@ -28,12 +28,23 @@ export const BookingFlow: React.FC = () => {
     activeAppliedCoupon ? activeAppliedCoupon.discountUsd : 0
   );
 
-  // Selected date and time state
-  const [selectedDay, setSelectedDay] = useState<{ dayName: string; dayNum: number; dateStr: string }>({
-    dayName: 'Mar',
-    dayNum: 19,
-    dateStr: '2024-11-19',
+  // Dynamic Calendar Logic
+  const [currentStartDate, setCurrentStartDate] = useState(() => new Date());
+  
+  const daysList = Array.from({ length: 6 }).map((_, i) => {
+    const d = new Date(currentStartDate);
+    d.setDate(d.getDate() + i);
+    const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    return {
+      dayName: dayNames[d.getDay()],
+      dayNum: d.getDate(),
+      dateStr: d.toISOString().split('T')[0],
+      monthName: d.toLocaleString('es-ES', { month: 'long', year: 'numeric' })
+    };
   });
+
+  // Selected date and time state
+  const [selectedDay, setSelectedDay] = useState<{ dayName: string; dayNum: number; dateStr: string; monthName: string }>(daysList[0]);
 
   const [selectedHour, setSelectedHour] = useState<string>('11:00 AM');
   const [selectedSpecialistId, setSelectedSpecialistId] = useState<string>('valeria');
@@ -50,15 +61,22 @@ export const BookingFlow: React.FC = () => {
   const [waitlistSuccessToast, setWaitlistSuccessToast] = useState<string | null>(null);
   const [showWaitlistPromptForSlot, setShowWaitlistPromptForSlot] = useState<string | null>(null);
 
-  // Calendar days strip for Nov 2024
-  const daysList = [
-    { dayName: 'Lun', dayNum: 18, dateStr: '2024-11-18' },
-    { dayName: 'Mar', dayNum: 19, dateStr: '2024-11-19' },
-    { dayName: 'Mié', dayNum: 20, dateStr: '2024-11-20' },
-    { dayName: 'Jue', dayNum: 21, dateStr: '2024-11-21' },
-    { dayName: 'Vie', dayNum: 22, dateStr: '2024-11-22' },
-    { dayName: 'Sáb', dayNum: 23, dateStr: '2024-11-23' },
-  ];
+  // Calendar navigation
+  const handlePrevDays = () => {
+    setCurrentStartDate(prev => {
+      const d = new Date(prev);
+      d.setDate(d.getDate() - 6);
+      return d;
+    });
+  };
+
+  const handleNextDays = () => {
+    setCurrentStartDate(prev => {
+      const d = new Date(prev);
+      d.setDate(d.getDate() + 6);
+      return d;
+    });
+  };
 
   // Time slots for morning and afternoon
   const morningSlots = [
@@ -335,17 +353,19 @@ export const BookingFlow: React.FC = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <span className="material-symbols-outlined text-[#725b38] text-[20px]">calendar_month</span>
-            <h3 className="font-serif text-lg font-bold text-[#1c1b1a]">Noviembre 2024</h3>
+            <h3 className="font-serif text-lg font-bold text-[#1c1b1a] capitalize">{daysList[0].monthName}</h3>
           </div>
           <div className="flex items-center gap-1">
             <button
               type="button"
+              onClick={handlePrevDays}
               className="w-7 h-7 rounded-full bg-[#f8f3f0] hover:bg-[#f2edea] flex items-center justify-center text-[#1c1b1a] transition-colors"
             >
               <span className="material-symbols-outlined text-[18px]">chevron_left</span>
             </button>
             <button
               type="button"
+              onClick={handleNextDays}
               className="w-7 h-7 rounded-full bg-[#f8f3f0] hover:bg-[#f2edea] flex items-center justify-center text-[#1c1b1a] transition-colors"
             >
               <span className="material-symbols-outlined text-[18px]">chevron_right</span>
@@ -801,8 +821,8 @@ export const BookingFlow: React.FC = () => {
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-1.5 min-w-0">
               <span className="material-symbols-outlined text-[16px] text-[#725b38]">event_seat</span>
-              <span className="text-xs text-[#1c1b1a] font-semibold truncate">
-                {selectedDay.dayName} {selectedDay.dayNum} Nov, {selectedHour} • {currentSpecialist.name}
+              <span className="text-xs text-[#1c1b1a] font-semibold truncate capitalize">
+                {selectedDay.dayName} {selectedDay.dayNum} {selectedDay.monthName.split(' ')[0].slice(0, 3)}, {selectedHour} • {currentSpecialist.name}
               </span>
             </div>
             <div className="text-right shrink-0">
