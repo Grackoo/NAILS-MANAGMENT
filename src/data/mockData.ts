@@ -463,9 +463,6 @@ export const AVAILABLE_REWARD_COUPONS: LoyaltyRewardCoupon[] = [
     isRedeemed: false,
   },
 ];
-    isRedeemed: false,
-  },
-];
 
 export const INITIAL_LOYALTY_PROFILE: LoyaltyProfile = {
   clientId: 'cl-1',
