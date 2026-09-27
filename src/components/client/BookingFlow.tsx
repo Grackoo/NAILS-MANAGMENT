@@ -24,8 +24,8 @@ export const BookingFlow: React.FC = () => {
   } = useStudio();
 
   // Loyalty Points Discount State
-  const [selectedDiscountUsd, setSelectedDiscountUsd] = useState<number>(
-    activeAppliedCoupon ? activeAppliedCoupon.discountUsd : 0
+  const [selectedDiscountMXN, setSelectedDiscountMXN] = useState<number>(
+    activeAppliedCoupon ? activeAppliedCoupon.discountMXN : 0
   );
 
   // Dynamic Calendar Logic
@@ -97,7 +97,7 @@ export const BookingFlow: React.FC = () => {
       ? { name: 'Cualquier manicurista', role: 'Asignación Signature' }
       : specialists.find((s) => s.id === selectedSpecialistId) || specialists[0];
 
-  const activeDiscount = activeAppliedCoupon ? activeAppliedCoupon.discountUsd : selectedDiscountUsd;
+  const activeDiscount = activeAppliedCoupon ? activeAppliedCoupon.discountMXN : selectedDiscountMXN;
   const finalPrice = Math.max(0, selectedService.price - activeDiscount);
   const pointsEarned = Math.round(finalPrice * 10);
 
@@ -114,8 +114,8 @@ export const BookingFlow: React.FC = () => {
       if (activeAppliedCoupon) {
         pointsCost = activeAppliedCoupon.pointsCost;
         setActiveAppliedCoupon(null);
-      } else if (selectedDiscountUsd > 0) {
-        const matchingCoupon = availableRewardCoupons.find((c) => c.discountUsd === selectedDiscountUsd);
+      } else if (selectedDiscountMXN > 0) {
+        const matchingCoupon = availableRewardCoupons.find((c) => c.discountMXN === selectedDiscountMXN);
         if (matchingCoupon && loyaltyProfile.pointsBalance >= matchingCoupon.pointsCost) {
           pointsCost = matchingCoupon.pointsCost;
           redeemCoupon(matchingCoupon.id);
@@ -151,7 +151,7 @@ export const BookingFlow: React.FC = () => {
         dateStr: selectedDay.dateStr,
         pointsEarned: pointsEarned,
         pointsRedeemed: pointsCost > 0 ? pointsCost : undefined,
-        pointsDiscountUsd: activeDiscount > 0 ? activeDiscount : undefined,
+        pointsDiscountMXN: activeDiscount > 0 ? activeDiscount : undefined,
       });
 
       setIsSubmitting(false);
@@ -687,7 +687,7 @@ export const BookingFlow: React.FC = () => {
               <div>
                 <span className="font-bold text-[#1c1b1a] block">{activeAppliedCoupon.title}</span>
                 <span className="text-[10px] text-green-700 font-semibold">
-                  -${activeAppliedCoupon.discountUsd} USD aplicado (Código: {activeAppliedCoupon.code})
+                  -${activeAppliedCoupon.discountMXN} MXN aplicado (Código: {activeAppliedCoupon.code})
                 </span>
               </div>
             </div>
@@ -695,7 +695,7 @@ export const BookingFlow: React.FC = () => {
               type="button"
               onClick={() => {
                 setActiveAppliedCoupon(null);
-                setSelectedDiscountUsd(0);
+                setSelectedDiscountMXN(0);
               }}
               className="text-[10px] text-[#7d766f] hover:text-red-600 font-semibold underline"
             >
@@ -715,9 +715,9 @@ export const BookingFlow: React.FC = () => {
               {/* Option 0: No discount */}
               <button
                 type="button"
-                onClick={() => setSelectedDiscountUsd(0)}
+                onClick={() => setSelectedDiscountMXN(0)}
                 className={`p-2.5 rounded-xl border text-center transition-all ${
-                  selectedDiscountUsd === 0
+                  selectedDiscountMXN === 0
                     ? 'bg-[#1e1b18] text-white border-[#1e1b18] shadow-xs'
                     : 'bg-[#f8f3f0] hover:bg-[#f2edea] text-[#4c4640] border-[#cec5bd]/40'
                 }`}
@@ -730,16 +730,16 @@ export const BookingFlow: React.FC = () => {
               <button
                 type="button"
                 disabled={loyaltyProfile.pointsBalance < 500}
-                onClick={() => setSelectedDiscountUsd(10)}
+                onClick={() => setSelectedDiscountMXN(10)}
                 className={`p-2.5 rounded-xl border text-center transition-all ${
-                  selectedDiscountUsd === 10
+                  selectedDiscountMXN === 10
                     ? 'bg-[#fedeb2] text-[#584323] border-[#725b38] shadow-xs font-bold ring-1 ring-[#725b38]'
                     : loyaltyProfile.pointsBalance >= 500
                     ? 'bg-white hover:bg-[#f8f3f0] text-[#1c1b1a] border-[#cec5bd]/50'
                     : 'bg-[#f8f3f0] text-gray-400 border-transparent opacity-60 cursor-not-allowed'
                 }`}
               >
-                <span className="text-xs font-bold block">-$10 USD</span>
+                <span className="text-xs font-bold block">-$10 MXN</span>
                 <span className="text-[9px] block">500 pts</span>
               </button>
 
@@ -747,16 +747,16 @@ export const BookingFlow: React.FC = () => {
               <button
                 type="button"
                 disabled={loyaltyProfile.pointsBalance < 1000}
-                onClick={() => setSelectedDiscountUsd(25)}
+                onClick={() => setSelectedDiscountMXN(25)}
                 className={`p-2.5 rounded-xl border text-center transition-all ${
-                  selectedDiscountUsd === 25
+                  selectedDiscountMXN === 25
                     ? 'bg-[#fedeb2] text-[#584323] border-[#725b38] shadow-xs font-bold ring-1 ring-[#725b38]'
                     : loyaltyProfile.pointsBalance >= 1000
                     ? 'bg-white hover:bg-[#f8f3f0] text-[#1c1b1a] border-[#cec5bd]/50'
                     : 'bg-[#f8f3f0] text-gray-400 border-transparent opacity-60 cursor-not-allowed'
                 }`}
               >
-                <span className="text-xs font-bold block">-$25 USD</span>
+                <span className="text-xs font-bold block">-$25 MXN</span>
                 <span className="text-[9px] block">1,000 pts</span>
               </button>
 
@@ -764,16 +764,16 @@ export const BookingFlow: React.FC = () => {
               <button
                 type="button"
                 disabled={loyaltyProfile.pointsBalance < 1500}
-                onClick={() => setSelectedDiscountUsd(40)}
+                onClick={() => setSelectedDiscountMXN(40)}
                 className={`p-2.5 rounded-xl border text-center transition-all ${
-                  selectedDiscountUsd === 40
+                  selectedDiscountMXN === 40
                     ? 'bg-[#fedeb2] text-[#584323] border-[#725b38] shadow-xs font-bold ring-1 ring-[#725b38]'
                     : loyaltyProfile.pointsBalance >= 1500
                     ? 'bg-white hover:bg-[#f8f3f0] text-[#1c1b1a] border-[#cec5bd]/50'
                     : 'bg-[#f8f3f0] text-gray-400 border-transparent opacity-60 cursor-not-allowed'
                 }`}
               >
-                <span className="text-xs font-bold block">-$40 USD</span>
+                <span className="text-xs font-bold block">-$40 MXN</span>
                 <span className="text-[9px] block">1,500 pts</span>
               </button>
             </div>
@@ -784,7 +784,7 @@ export const BookingFlow: React.FC = () => {
         <div className="bg-[#f8f3f0] p-3 rounded-xl border border-[#cec5bd]/30 space-y-1 text-xs">
           <div className="flex items-center justify-between text-[#4c4640]">
             <span>Precio del tratamiento:</span>
-            <span>${selectedService.price.toFixed(2)} USD</span>
+            <span>${selectedService.price.toFixed(2)} MXN</span>
           </div>
           {activeDiscount > 0 && (
             <div className="flex items-center justify-between text-green-700 font-semibold">
@@ -792,12 +792,12 @@ export const BookingFlow: React.FC = () => {
                 <span className="material-symbols-outlined text-[15px]">stars</span>
                 <span>Descuento Club Privilège:</span>
               </span>
-              <span>-${activeDiscount.toFixed(2)} USD</span>
+              <span>-${activeDiscount.toFixed(2)} MXN</span>
             </div>
           )}
           <div className="flex items-center justify-between text-[#1c1b1a] font-bold pt-1 border-t border-[#cec5bd]/30">
             <span>Total a pagar en salón:</span>
-            <span className="font-serif text-sm">${finalPrice.toFixed(2)} USD</span>
+            <span className="font-serif text-sm">${finalPrice.toFixed(2)} MXN</span>
           </div>
           <div className="flex items-center justify-between text-[11px] text-[#725b38] pt-0.5">
             <span>Puntos que acumularás:</span>
@@ -832,12 +832,12 @@ export const BookingFlow: React.FC = () => {
                     ${selectedService.price.toFixed(2)}
                   </span>
                   <span className="font-serif text-base font-bold text-green-700">
-                    ${finalPrice.toFixed(2)} USD
+                    ${finalPrice.toFixed(2)} MXN
                   </span>
                 </div>
               ) : (
                 <span className="font-serif text-base font-bold text-[#1c1b1a]">
-                  ${selectedService.price.toFixed(2)} USD
+                  ${selectedService.price.toFixed(2)} MXN
                 </span>
               )}
             </div>

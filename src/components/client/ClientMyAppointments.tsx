@@ -109,7 +109,7 @@ export const ClientMyAppointments: React.FC = () => {
               </span>
             </div>
             <p className="text-xs text-white/80">
-              Tienes <strong className="text-[#fedeb2] font-mono text-sm font-bold">{loyaltyProfile.pointsBalance.toLocaleString()} pts</strong> acumulados (~$40 USD de descuento disponibles).
+              Tienes <strong className="text-[#fedeb2] font-mono text-sm font-bold">{loyaltyProfile.pointsBalance.toLocaleString()} pts</strong> acumulados (~$40 MXN de descuento disponibles).
             </p>
           </div>
         </div>
@@ -157,7 +157,7 @@ export const ClientMyAppointments: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="font-serif text-base font-bold text-[#1c1b1a]">{apt.serviceTitle}</h3>
-                    <p className="text-xs text-[#4c4640]">{apt.dateStr} • ${apt.price.toFixed(2)} USD</p>
+                    <p className="text-xs text-[#4c4640]">{apt.dateStr} • ${apt.price.toFixed(2)} MXN</p>
                   </div>
                 </div>
 

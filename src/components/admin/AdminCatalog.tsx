@@ -208,10 +208,10 @@ export const AdminCatalog: React.FC = () => {
           <div>
             <div className="flex items-baseline gap-1.5">
               <span className="font-serif text-2xl font-bold text-[#1c1b1a]">$4,850</span>
-              <span className="text-xs text-[#4c4640]">USD / mes</span>
+              <span className="text-xs text-[#4c4640]">MXN / mes</span>
             </div>
             <p className="text-[11px] text-[#4c4640] mt-1">
-              Ticket promedio: <span className="font-bold text-[#1c1b1a]">$52.40 USD</span>
+              Ticket promedio: <span className="font-bold text-[#1c1b1a]">$52.40 MXN</span>
             </p>
           </div>
         </div>
@@ -561,7 +561,7 @@ export const AdminCatalog: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-[#4c4640]">Precio ($ USD)</label>
+                  <label className="text-[10px] uppercase font-bold text-[#4c4640]">Precio ($ MXN)</label>
                   <div className="relative flex items-center">
                     <span className="absolute left-3 text-[#7d766f] text-xs font-semibold">$</span>
                     <input

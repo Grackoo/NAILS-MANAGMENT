@@ -227,7 +227,7 @@ export const AdminSchedule: React.FC = () => {
               </span>
               <span className="font-serif text-2xl font-bold text-[#1c1b1a] mt-1 block">
                 ${estimatedRevenue.toFixed(2)}{' '}
-                <span className="text-[11px] font-sans font-normal text-[#4c4640]">USD</span>
+                <span className="text-[11px] font-sans font-normal text-[#4c4640]">MXN</span>
               </span>
             </div>
             <div className="w-9 h-9 rounded-full bg-[#f8f3f0] flex items-center justify-center text-[#1c1b1a]">

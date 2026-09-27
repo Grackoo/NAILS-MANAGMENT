@@ -78,9 +78,9 @@ export const BookingSuccessModal: React.FC<BookingSuccessModalProps> = ({
               <span className="material-symbols-outlined text-amber-600 text-[18px]">stars</span>
               <div>
                 <span className="font-bold text-[#1c1b1a] block">Club Vernis Privilège</span>
-                {appointment.pointsDiscountUsd && appointment.pointsDiscountUsd > 0 ? (
+                {appointment.pointsDiscountMXN && appointment.pointsDiscountMXN > 0 ? (
                   <span className="text-[10px] text-green-700 font-semibold">
-                    Descuento: -${appointment.pointsDiscountUsd} USD ({appointment.pointsRedeemed} pts canjeados)
+                    Descuento: -${appointment.pointsDiscountMXN} MXN ({appointment.pointsRedeemed} pts canjeados)
                   </span>
                 ) : (
                   <span className="text-[10px] text-[#725b38]">

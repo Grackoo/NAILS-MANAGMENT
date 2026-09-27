@@ -383,10 +383,10 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (!couponDef) {
       return { success: false, message: 'Recompensa no encontrada.' };
     }
-    if (loyaltyProfile.pointsBalance < couponDef.pointsCost) {
+    if ((currentClient ? currentClient.pointsBalance || 0 : loyaltyProfile.pointsBalance) < couponDef.pointsCost) {
       return {
         success: false,
-        message: `Puntos insuficientes. Requiere ${couponDef.pointsCost} pts (disponibles: ${loyaltyProfile.pointsBalance} pts).`,
+        message: `Puntos insuficientes. Requiere ${couponDef.pointsCost} pts (disponibles: ${(currentClient ? currentClient.pointsBalance || 0 : loyaltyProfile.pointsBalance)} pts).`,
       };
     }
 
@@ -402,8 +402,8 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       dateStr: 'Hoy',
       type: 'redeemed',
       points: -couponDef.pointsCost,
-      description: `Canje de ${couponDef.title} (-$${couponDef.discountUsd} USD)`,
-      discountAppliedUsd: couponDef.discountUsd,
+      description: `Canje de ${couponDef.title} (-$${couponDef.discountMXN} MXN)`,
+      discountAppliedMXN: couponDef.discountMXN,
     };
 
     setLoyaltyProfile((prev) => {
@@ -416,19 +416,27 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
     });
 
-    setClients((prev) =>
-      prev.map((cl) =>
-        cl.id === 'cl-1' || cl.name.toLowerCase().includes('elena')
-          ? { ...cl, pointsBalance: loyaltyProfile.pointsBalance - couponDef.pointsCost }
-          : cl
-      )
-    );
+    if (currentClient) {
+      const updatedClient = { ...currentClient, pointsBalance: (currentClient.pointsBalance || 0) - couponDef.pointsCost };
+      setCurrentClient(updatedClient);
+      setClients((prev) =>
+        prev.map((cl) => (cl.id === currentClient.id ? updatedClient : cl))
+      );
+    } else {
+      setClients((prev) =>
+        prev.map((cl) =>
+          cl.id === 'cl-1' || cl.name.toLowerCase().includes('elena')
+            ? { ...cl, pointsBalance: loyaltyProfile.pointsBalance - couponDef.pointsCost }
+            : cl
+        )
+      );
+    }
 
     setActiveAppliedCoupon(newCoupon);
 
     return {
       success: true,
-      message: `¡Cupón de $${couponDef.discountUsd} USD canjeado exitosamente! Aplicado a tu próxima cita.`,
+      message: `¡Cupón de $${couponDef.discountMXN} MXN canjeado exitosamente! Aplicado a tu próxima cita.`,
       coupon: newCoupon,
     };
   };

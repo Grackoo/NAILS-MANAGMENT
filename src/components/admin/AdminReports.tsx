@@ -85,7 +85,7 @@ export const AdminReports: React.FC = () => {
                 <span className="w-2.5 h-2.5 rounded-full bg-[#725b38] inline-block"></span>
                 Ganancias:
               </span>
-              <span className="font-bold text-white font-mono">${dataPoint.ganancias.toLocaleString()} USD</span>
+              <span className="font-bold text-white font-mono">${dataPoint.ganancias.toLocaleString()} MXN</span>
             </div>
 
             <div className="flex items-center justify-between">
@@ -203,7 +203,7 @@ export const AdminReports: React.FC = () => {
               ${totalRevenue.toLocaleString()}
             </span>
             <span className="text-[11px] font-sans text-[#725b38] font-semibold block mt-0.5">
-              USD totales recaudados
+              MXN totales recaudados
             </span>
             <p className="text-[10px] text-green-700 font-bold mt-1.5 flex items-center gap-1">
               <span className="material-symbols-outlined text-[14px]">trending_up</span>
@@ -250,7 +250,7 @@ export const AdminReports: React.FC = () => {
               ${avgTicket.toFixed(2)}
             </span>
             <span className="text-[11px] font-sans text-[#4c4640] block mt-0.5">
-              USD por clienta atendida
+              MXN por clienta atendida
             </span>
             <p className="text-[10px] text-green-700 font-bold mt-1.5 flex items-center gap-1">
               <span className="material-symbols-outlined text-[14px]">arrow_upward</span>
@@ -274,7 +274,7 @@ export const AdminReports: React.FC = () => {
               {bestMonth.mes}
             </span>
             <span className="text-[11px] font-sans text-[#1c1b1a] font-bold block mt-0.5">
-              ${bestMonth.ganancias.toLocaleString()} USD ({bestMonth.citas} citas)
+              ${bestMonth.ganancias.toLocaleString()} MXN ({bestMonth.citas} citas)
             </span>
             <p className="text-[10px] text-[#4c4640] mt-1.5">
               {bestMonth.mesCompleto}
@@ -296,7 +296,7 @@ export const AdminReports: React.FC = () => {
               </span>
             </div>
             <h2 className="font-serif text-lg sm:text-xl font-bold text-[#1c1b1a] mt-0.5">
-              Ganancias Mensuales ($ USD) vs. Volumen de Citas
+              Ganancias Mensuales ($ MXN) vs. Volumen de Citas
             </h2>
           </div>
 
@@ -305,7 +305,7 @@ export const AdminReports: React.FC = () => {
             {(activeMetric === 'both' || activeMetric === 'revenue') && (
               <span className="flex items-center gap-1.5 font-semibold text-[#1c1b1a]">
                 <span className="w-3 h-3 rounded-md bg-[#725b38] inline-block shadow-xs"></span>
-                <span>Ganancias ($ USD)</span>
+                <span>Ganancias ($ MXN)</span>
               </span>
             )}
             {(activeMetric === 'both' || activeMetric === 'volume') && (
@@ -345,7 +345,7 @@ export const AdminReports: React.FC = () => {
                 axisLine={{ stroke: '#cec5bd' }}
               />
 
-              {/* Left Y Axis for Revenue ($ USD) */}
+              {/* Left Y Axis for Revenue ($ MXN) */}
               <YAxis
                 yAxisId="left"
                 stroke="#725b38"
@@ -456,7 +456,7 @@ export const AdminReports: React.FC = () => {
                 />
                 <Tooltip
                   formatter={(value: any, name: any, item: any) => [
-                    `$${value} USD (${item.payload.citas} citas - ${item.payload.porcentaje}%)`,
+                    `$${value} MXN (${item.payload.citas} citas - ${item.payload.porcentaje}%)`,
                     'Ingresos',
                   ]}
                   contentStyle={{
@@ -480,7 +480,7 @@ export const AdminReports: React.FC = () => {
           <div className="space-y-1.5 pt-1 border-t border-[#f2edea] text-xs">
             <div className="flex items-center justify-between text-[#4c4640]">
               <span>Técnica más rentable:</span>
-              <strong className="text-[#1c1b1a]">Acrílico Esculpido ($1,980 USD • 38%)</strong>
+              <strong className="text-[#1c1b1a]">Acrílico Esculpido ($1,980 MXN • 38%)</strong>
             </div>
           </div>
         </div>
@@ -519,7 +519,7 @@ export const AdminReports: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="font-bold text-[#725b38] block">$2,340.00 USD</span>
+                  <span className="font-bold text-[#725b38] block">$2,340.00 MXN</span>
                   <span className="text-[10px] text-[#4c4640]">48 Citas (48% del total)</span>
                 </div>
               </div>
@@ -545,7 +545,7 @@ export const AdminReports: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="font-bold text-[#725b38] block">$1,620.00 USD</span>
+                  <span className="font-bold text-[#725b38] block">$1,620.00 MXN</span>
                   <span className="text-[10px] text-[#4c4640]">36 Citas (33% del total)</span>
                 </div>
               </div>
@@ -571,7 +571,7 @@ export const AdminReports: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="font-bold text-[#725b38] block">$890.00 USD</span>
+                  <span className="font-bold text-[#725b38] block">$890.00 MXN</span>
                   <span className="text-[10px] text-[#4c4640]">22 Citas (19% del total)</span>
                 </div>
               </div>

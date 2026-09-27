@@ -44,7 +44,7 @@ export interface PointsTransaction {
   points: number; // positive for earned, negative for redeemed
   description: string;
   serviceTitle?: string;
-  discountAppliedUsd?: number;
+  discountAppliedMXN?: number;
 }
 
 export interface LoyaltyRewardCoupon {
@@ -52,7 +52,7 @@ export interface LoyaltyRewardCoupon {
   title: string;
   subtitle: string;
   pointsCost: number;
-  discountUsd: number;
+  discountMXN: number;
   code: string;
   isRedeemed: boolean;
   canjeDate?: string;
@@ -142,7 +142,7 @@ export interface Appointment {
   blockReason?: string;
   pointsEarned?: number;
   pointsRedeemed?: number;
-  pointsDiscountUsd?: number;
+  pointsDiscountMXN?: number;
 }
 
 export type WaitlistStatus = 'esperando' | 'notificada' | 'asignada' | 'expirada';

@@ -10,6 +10,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
     setClientTab,
     activeAppliedCoupon,
     setActiveAppliedCoupon,
+    currentClient,
   } = useStudio();
 
   const [redeemSuccessModal, setRedeemSuccessModal] = useState<LoyaltyRewardCoupon | null>(null);
@@ -17,7 +18,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
 
   // Next tier calculation
   const nextTierPoints = 2500;
-  const currentTierPoints = loyaltyProfile.pointsBalance;
+  const currentTierPoints = currentClient?.pointsBalance || currentTierPoints;
   const pointsRemaining = Math.max(0, nextTierPoints - currentTierPoints);
   const tierProgressPercent = Math.min(100, Math.round((currentTierPoints / nextTierPoints) * 100));
 
@@ -45,7 +46,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
             Programa de Puntos & Fidelidad
           </h1>
           <p className="text-xs text-[#4c4640] leading-relaxed mt-1">
-            Acumula 10 puntos por cada $1 USD en tus citas y canjéalos por descuentos inmediatos en tus próximos tratamientos.
+            Acumula 10 puntos por cada $1 MXN en tus citas y canjéalos por descuentos inmediatos en tus próximos tratamientos.
           </p>
         </div>
 
@@ -100,7 +101,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
           </span>
           <div className="flex items-baseline gap-2 mt-0.5">
             <span className="font-serif text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-white via-[#fedeb2] to-amber-200 bg-clip-text text-transparent">
-              {loyaltyProfile.pointsBalance.toLocaleString()}
+              {currentTierPoints.toLocaleString()}
             </span>
             <span className="text-sm font-semibold text-[#fedeb2] uppercase tracking-wider">
               Pts Vernis
@@ -108,7 +109,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
           </div>
           <p className="text-[11px] text-white/70 mt-1 flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400"></span>
-            Equivalente a hasta <strong className="text-white font-bold">~$45 USD</strong> en descuentos de manicura de autor.
+            Equivalente a hasta <strong className="text-white font-bold">~$45 MXN</strong> en descuentos de manicura de autor.
           </p>
         </div>
 
@@ -130,7 +131,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
             ></div>
           </div>
           <div className="flex items-center justify-between text-[10px] text-white/50 pt-0.5">
-            <span>Socia: {loyaltyProfile.clientName}</span>
+            <span>Socia: {currentClient?.name || loyaltyProfile.clientName}</span>
             <span>Membresía: {loyaltyProfile.membershipNumber}</span>
           </div>
         </div>
@@ -159,7 +160,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
                 </span>
               </div>
               <p className="text-[11px] text-[#4c4640]">
-                Descuento de <strong className="text-[#1c1b1a]">${activeAppliedCoupon.discountUsd} USD</strong> asignado para tu próxima cita.
+                Descuento de <strong className="text-[#1c1b1a]">${activeAppliedCoupon.discountMXN} MXN</strong> asignado para tu próxima cita.
               </p>
             </div>
           </div>
@@ -185,14 +186,14 @@ export const ClientLoyaltyProgram: React.FC = () => {
             </h2>
           </div>
           <span className="text-xs font-bold text-[#725b38] bg-[#f8f3f0] px-2.5 py-1 rounded-full border border-[#cec5bd]/40">
-            {loyaltyProfile.pointsBalance} pts libres
+            {currentTierPoints} pts libres
           </span>
         </div>
 
         {/* Coupons Bento Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           {availableRewardCoupons.map((coupon) => {
-            const canAfford = loyaltyProfile.pointsBalance >= coupon.pointsCost;
+            const canAfford = currentTierPoints >= coupon.pointsCost;
             const isCurrentlySelected = activeAppliedCoupon?.pointsCost === coupon.pointsCost;
 
             return (
@@ -217,7 +218,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
                       {coupon.pointsCost} Puntos
                     </span>
                     <span className="font-serif text-xl font-bold text-[#1c1b1a]">
-                      -${coupon.discountUsd} USD
+                      -${coupon.discountMXN} MXN
                     </span>
                   </div>
 
@@ -245,7 +246,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
                     </button>
                   ) : (
                     <span className="text-[10px] font-bold text-[#7d766f] bg-[#f2edea] px-2.5 py-1 rounded-full">
-                      Faltan {coupon.pointsCost - loyaltyProfile.pointsBalance} pts
+                      Faltan {coupon.pointsCost - currentTierPoints} pts
                     </span>
                   )}
                 </div>
@@ -305,9 +306,9 @@ export const ClientLoyaltyProgram: React.FC = () => {
                   >
                     {isEarned ? `+${tx.points}` : tx.points} pts
                   </span>
-                  {tx.discountAppliedUsd && (
+                  {tx.discountAppliedMXN && (
                     <span className="block text-[10px] text-[#725b38] font-bold">
-                      -${tx.discountAppliedUsd} USD
+                      -${tx.discountAppliedMXN} MXN
                     </span>
                   )}
                 </div>
@@ -328,7 +329,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-[#4c4640]">
           <div className="bg-white/80 p-3 rounded-2xl border border-[#cec5bd]/30 space-y-1">
-            <span className="text-sm font-bold text-[#725b38] block">10 Pts / $1 USD</span>
+            <span className="text-sm font-bold text-[#725b38] block">10 Pts / $1 MXN</span>
             <p className="text-[11px] leading-relaxed">
               Acumula automáticamente en cada manicura, pedicura o diseño 3D.
             </p>
@@ -372,7 +373,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
                 ¡Canje Confirmado!
               </span>
               <h3 className="font-serif text-2xl font-bold text-[#1c1b1a]">
-                Descuento de ${redeemSuccessModal.discountUsd} USD Listo
+                Descuento de ${redeemSuccessModal.discountMXN} MXN Listo
               </h3>
               <p className="text-xs text-[#4c4640] leading-relaxed">
                 Has canjeado {redeemSuccessModal.pointsCost} puntos por el cupón <strong>{redeemSuccessModal.title}</strong>. Se aplicará automáticamente al reservar tu próximo servicio.
@@ -386,7 +387,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
                 <span className="font-mono text-base font-bold text-[#1c1b1a] block">{redeemSuccessModal.code}</span>
               </div>
               <span className="px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-bold">
-                -${redeemSuccessModal.discountUsd} USD
+                -${redeemSuccessModal.discountMXN} MXN
               </span>
             </div>
 

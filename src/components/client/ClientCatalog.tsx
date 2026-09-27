@@ -63,7 +63,7 @@ export const ClientCatalog: React.FC = () => {
               Club Privilège: {loyaltyProfile.pointsBalance} pts acumulados
             </span>
             <span className="text-[10px] text-white/70">
-              Acumula 10 pts por cada $1 USD y canjea hasta $40 USD de descuento
+              Acumula 10 pts por cada $1 MXN y canjea hasta $40 MXN de descuento
             </span>
           </div>
         </div>

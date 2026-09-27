@@ -71,55 +71,6 @@ export const Header: React.FC = () => {
 
             {/* Right Tools: Viewport Toggle & Profile Avatar */}
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* Device Viewport Preview Toggle (Mobile Frame vs Desktop) */}
-              <div className="hidden sm:inline-flex items-center p-0.5 rounded-full bg-[#f2edea] border border-[#cec5bd]/50 text-xs">
-                <button
-                  type="button"
-                  onClick={() => setViewportMode('responsive')}
-                  className={`px-2.5 py-1 rounded-full font-medium transition-all ${
-                    viewportMode === 'responsive'
-                      ? 'bg-white text-[#1c1b1a] shadow-xs'
-                      : 'text-[#4c4640] hover:text-[#1c1b1a]'
-                  }`}
-                  title="Diseño Adaptativo Fluido"
-                >
-                  <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[15px]">devices</span>
-                    <span>Fluido</span>
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setViewportMode('mobile_preview')}
-                  className={`px-2.5 py-1 rounded-full font-medium transition-all ${
-                    viewportMode === 'mobile_preview'
-                      ? 'bg-white text-[#1c1b1a] shadow-xs'
-                      : 'text-[#4c4640] hover:text-[#1c1b1a]'
-                  }`}
-                  title="Simular Pantalla Móvil de la App"
-                >
-                  <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[15px]">smartphone</span>
-                    <span>Móvil</span>
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setViewportMode('desktop_preview')}
-                  className={`px-2.5 py-1 rounded-full font-medium transition-all ${
-                    viewportMode === 'desktop_preview'
-                      ? 'bg-white text-[#1c1b1a] shadow-xs'
-                      : 'text-[#4c4640] hover:text-[#1c1b1a]'
-                  }`}
-                  title="Simular Consola de Escritorio"
-                >
-                  <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[15px]">desktop_mac</span>
-                    <span>Escritorio</span>
-                  </span>
-                </button>
-              </div>
-
               {/* Loyalty Points Pill Button */}
               {role === 'client' && (
                 <button
