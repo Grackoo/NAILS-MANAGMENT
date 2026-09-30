@@ -21,6 +21,7 @@ export const BookingFlow: React.FC = () => {
     redeemCoupon,
     addLoyaltyPoints,
     currentClient,
+    appointments,
   } = useStudio();
 
   // Loyalty Points Discount State
@@ -156,7 +157,32 @@ export const BookingFlow: React.FC = () => {
 
       setIsSubmitting(false);
       setCreatedAppointment(newApt);
+      let waMessage = `¡Hola L'Atelier Vernis! He reservado una nueva cita:\n\n` +
+        `📅 Fecha: ${selectedDay.dateStr}\n` +
+        `⏰ Hora: ${selectedHour}\n` +
+        `💅 Servicio: ${selectedService.title}\n` +
+        `👤 Especialista: ${currentSpecialist.name}\n` +
+        `🙋‍♀️ A nombre de: ${clientName.trim()}\n` +
+        `📞 Teléfono: ${clientPhone.trim()}\n` +
+        (clientNotes.trim() ? `📝 Notas: ${clientNotes.trim()}\n` : '') +
+        `\n¡Gracias!`;
+
+      if (isFirstBooking) {
+        const rawPhone = clientPhone.replace('+52', '').trim();
+        const generatedUser = clientPhone.trim();
+        const generatedPwd = clientName.trim().split(' ')[0].toLowerCase() + rawPhone.slice(-4);
+        const superLink = window.location.origin + `?autoLogin=` + encodeURIComponent(clientPhone.trim());
+        waMessage += `\n\n🔑 *Mis Accesos al Portal VIP (Para mis próximas citas):*\n` +
+          `Usuario: ${generatedUser}\n` +
+          `Contraseña: ${generatedPwd}\n` +
+          `Superlink de acceso directo: ${superLink}\n` +
+          `(Este enlace me permitirá entrar directo sin poner contraseña, guárdenlo en mi registro por favor.)`;
+      }
+      
+      const waUrl = `https://wa.me/527711960057?text=${encodeURIComponent(waMessage)}`;
+      window.open(waUrl, '_blank');
     }, 600);
+
   };
 
   return (

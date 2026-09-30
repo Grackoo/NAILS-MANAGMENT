@@ -6,14 +6,21 @@ import { AddReviewModal } from '../modals/AddReviewModal';
 import { ClientReviewsShowcase } from './ClientReviewsShowcase';
 
 export const ClientMyAppointments: React.FC = () => {
-  const { appointments, setClientTab, clientNotificationPreferences, loyaltyProfile } = useStudio();
+  const { appointments, setClientTab, clientNotificationPreferences, loyaltyProfile, currentClient } = useStudio();
   const [selectedFormulaApt, setSelectedFormulaApt] = useState<Appointment | null>(null);
   const [reviewingAppointment, setReviewingAppointment] = useState<Appointment | null>(null);
   const [isGeneralReviewOpen, setIsGeneralReviewOpen] = useState(false);
   const [reviewToast, setReviewToast] = useState<string | null>(null);
 
-  // Client visible appointments (filter out system technical blocks)
-  const clientAppointments = appointments.filter((a) => a.shift !== 'bloqueo');
+  // Client visible appointments (filter out system technical blocks and match current client)
+  const clientAppointments = appointments.filter((a) => {
+    if (a.shift === 'bloqueo') return false;
+    if (currentClient) {
+      // Match by phone since it's the unique identifier used at login
+      return a.clientPhone === currentClient.phone || a.clientName.toLowerCase() === currentClient.name.toLowerCase();
+    }
+    return true; // fallback for preview modes if no client
+  });
 
   return (
     <div className="flex flex-col w-full px-4 sm:px-6 max-w-md md:max-w-2xl mx-auto space-y-5 pb-28 pt-3">

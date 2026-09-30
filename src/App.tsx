@@ -19,7 +19,16 @@ import { ClientLoyaltyProgram } from './components/client/ClientLoyaltyProgram';
 import { LoginScreen } from './components/auth/LoginScreen';
 
 const AppContent: React.FC = () => {
-  const { isAuthenticated, role, clientTab, adminTab, setAdminTab, viewportMode, waitlist, freedSlotAlert, setFreedSlotAlert, reviews } = useStudio();
+  const { isAuthenticated, setIsAuthenticated, loginAsClient, role, clientTab, adminTab, setAdminTab, viewportMode, waitlist, freedSlotAlert, setFreedSlotAlert, reviews } = useStudio();
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const autoLogin = params.get('autoLogin');
+    if (autoLogin && !isAuthenticated) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      loginAsClient(autoLogin);
+    }
+  }, [isAuthenticated, loginAsClient]);
 
   // If not authenticated, show login screen
   if (!isAuthenticated) {

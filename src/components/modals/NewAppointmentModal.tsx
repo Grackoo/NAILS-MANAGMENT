@@ -34,7 +34,7 @@ export const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ onClos
       shift: time.includes('PM') ? 'tarde' : 'mañana',
       shiftLabel: time.includes('PM') ? 'Turno Tarde' : 'Turno Mañana',
       clientName: clientName.trim(),
-      clientPhone: clientPhone.trim(),
+      clientPhone: '+52' + clientPhone.trim(),
       clientNotes: notes.trim() || undefined,
       isVip,
       serviceId: selectedService.id,
@@ -86,18 +86,24 @@ export const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ onClos
               />
             </div>
             <div className="space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[#4c4640]">Teléfono WhatsApp</label>
-              <input
-                type="tel"
-                required
-                value={clientPhone}
-                onChange={(e) => setClientPhone(e.target.value)}
-                placeholder="+34 600 000 000"
-                className="w-full h-10 px-3 rounded-xl bg-white border border-[#cec5bd]/40 text-xs text-[#1c1b1a] outline-none focus:ring-1 focus:ring-[#725b38]"
-              />
+              <label className="text-[10px] uppercase font-bold text-[#4c4640] block mb-1">WhatsApp</label>
+              <div className="flex">
+                <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-[#cec5bd]/40 bg-[#f2edea] text-[#4c4640] text-xs font-semibold">
+                  +52
+                </span>
+                <input
+                  type="tel"
+                  required
+                  value={clientPhone}
+                  onChange={(e) => setClientPhone(e.target.value.replace(/\D/g, ''))}
+                  placeholder="10 d�gitos"
+                  maxLength={10}
+                  className="flex-1 w-full h-10 px-3 bg-white border border-[#cec5bd]/40 rounded-r-xl text-xs focus:outline-none focus:ring-1 focus:ring-[#725b38]"
+                />
+              </div>
             </div>
-          </div>
 
+          </div>
           <div className="space-y-1">
             <label className="text-[10px] uppercase font-bold text-[#4c4640]">Tratamiento Seleccionado</label>
             <select

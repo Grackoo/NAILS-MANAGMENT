@@ -3,7 +3,7 @@ import { useStudio } from '../../context/StudioContext';
 import { motion } from 'motion/react';
 
 export const LoginScreen: React.FC = () => {
-  const { loginAsClient, setIsAuthenticated, setRole } = useStudio();
+  const { loginAsClient, setIsAuthenticated, setRole, clients } = useStudio();
   const [tab, setTab] = useState<'client' | 'admin'>('client');
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
@@ -12,14 +12,28 @@ export const LoginScreen: React.FC = () => {
 
   const handleClientLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phone || phone.length < 8) {
-      setError('Por favor ingresa un número de teléfono válido.');
+    if (!phone || phone.length < 10) {
+      setError('Por favor ingresa un n�mero de tel�fono v�lido (10 d�gitos).');
       return;
     }
-    // Llama a loginAsClient (creará perfil si no existe)
-    loginAsClient(phone, name);
+    const fullPhone = '+52' + phone;
+    const existing = clients.find((c) => c.phone === fullPhone);
+    
+    if (existing) {
+       const expectedPwd = existing.name.split(' ')[0].toLowerCase() + phone.slice(-4);
+       if (password !== expectedPwd) {
+         setError('Contrase�a incorrecta. Si eres nueva, inventa una.');
+         return;
+       }
+    } else {
+       if (!name) {
+         setError('Como eres nueva, necesitamos tu nombre.');
+         return;
+       }
+    }
+    setError('');
+    loginAsClient(fullPhone, name);
   };
-
   const handleAdminLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (password === 'admin123') { // Simple mock password
@@ -76,15 +90,21 @@ export const LoginScreen: React.FC = () => {
             >
               <div>
                 <label className="block text-[10px] font-bold text-[#4c4640] uppercase tracking-wider mb-1.5">
-                  Número de Teléfono
+                  N�mero de Tel�fono
                 </label>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Ej. 555-123-4567"
-                  className="w-full h-11 px-4 bg-[#f8f3f0] border border-[#cec5bd]/50 rounded-xl text-sm focus:outline-none focus:border-[#725b38] focus:ring-1 focus:ring-[#725b38] transition-all"
-                />
+                <div className="flex">
+                  <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-[#cec5bd]/50 bg-[#f2edea] text-[#4c4640] text-sm font-semibold">
+                    +52
+                  </span>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                    placeholder="10 d�gitos"
+                    maxLength={10}
+                    className="flex-1 w-full h-11 px-3 bg-[#f8f3f0] border border-[#cec5bd]/50 rounded-r-xl text-sm focus:outline-none focus:border-[#725b38] focus:ring-1 focus:ring-[#725b38] transition-all"
+                  />
+                </div>
               </div>
               <div>
                 <label className="block text-[10px] font-bold text-[#4c4640] uppercase tracking-wider mb-1.5">
@@ -97,6 +117,18 @@ export const LoginScreen: React.FC = () => {
                   placeholder="Ej. María Pérez"
                   className="w-full h-11 px-4 bg-[#f8f3f0] border border-[#cec5bd]/50 rounded-xl text-sm focus:outline-none focus:border-[#725b38] focus:ring-1 focus:ring-[#725b38] transition-all"
                 />
+              <div>
+                <label className="block text-[10px] font-bold text-[#4c4640] uppercase tracking-wider mb-1.5">
+                  Contrase�a (Obligatoria si ya tienes cuenta)
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Tu contrase�a"
+                  className="w-full h-11 px-4 bg-[#f8f3f0] border border-[#cec5bd]/50 rounded-xl text-sm focus:outline-none focus:border-[#725b38] focus:ring-1 focus:ring-[#725b38] transition-all"
+                />
+              </div>
               </div>
               <button
                 type="submit"
