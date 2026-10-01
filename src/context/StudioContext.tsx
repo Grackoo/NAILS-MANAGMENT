@@ -217,7 +217,8 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [clients]);
 
   useEffect(() => {
-    localStorage.setItem('latelier_config', JSON.stringify(studioConfig));
+            localStorage.setItem('latelier_config', JSON.stringify(studioConfig));
+    syncToDb('syncStudioConfig', [studioConfig]);
   }, [studioConfig]);
 
   useEffect(() => {
@@ -233,7 +234,8 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [clientNotificationPreferences]);
 
   useEffect(() => {
-    localStorage.setItem('latelier_loyalty_profile', JSON.stringify(loyaltyProfile));
+            localStorage.setItem('latelier_loyalty_profile', JSON.stringify(loyaltyProfile));
+    syncToDb('syncLoyaltyProfile', [loyaltyProfile]);
   }, [loyaltyProfile]);
 
   const [reviews, setReviews] = useState<ServiceReview[]>(() => {
@@ -255,6 +257,8 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (data.waitlist?.length > 0) setWaitlist(data.waitlist);
         if (data.reviews?.length > 0) setReviews(data.reviews);
         if (data.services?.length > 0) setServices(data.services);
+          if (data.studioConfig) setStudioConfig(data.studioConfig);
+          if (data.loyaltyProfile) setLoyaltyProfile(data.loyaltyProfile);
       }
     });
   }, []);
