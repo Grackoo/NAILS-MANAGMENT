@@ -14,6 +14,7 @@ export const Header: React.FC = () => {
     clientNotificationPreferences,
     loyaltyProfile,
     setIsAuthenticated,
+    currentClient,
     setCurrentClient,
   } = useStudio();
 
