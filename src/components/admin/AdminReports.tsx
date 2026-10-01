@@ -29,21 +29,51 @@ export const AdminReports: React.FC = () => {
   const [timeRange, setTimeRange] = useState<'6m' | '12m'>('12m');
   const [activeMetric, setActiveMetric] = useState<'both' | 'revenue' | 'volume'>('both');
 
-  // Realistic annual studio performance data for L'Atelier Vernis (2024)
-  const fullYearData: MonthlyDataPoint[] = [
-    { mes: 'Ene', mesCompleto: 'Enero 2024', ganancias: 3200, citas: 68, ticketPromedio: 47.05, nuevasClientas: 18, meta: 3000 },
-    { mes: 'Feb', mesCompleto: 'Febrero 2024', ganancias: 3450, citas: 72, ticketPromedio: 47.91, nuevasClientas: 22, meta: 3200 },
-    { mes: 'Mar', mesCompleto: 'Marzo 2024', ganancias: 3890, citas: 80, ticketPromedio: 48.62, nuevasClientas: 25, meta: 3500 },
-    { mes: 'Abr', mesCompleto: 'Abril 2024', ganancias: 4120, citas: 84, ticketPromedio: 49.04, nuevasClientas: 27, meta: 3800 },
-    { mes: 'May', mesCompleto: 'Mayo 2024', ganancias: 4380, citas: 88, ticketPromedio: 49.77, nuevasClientas: 30, meta: 4000 },
-    { mes: 'Jun', mesCompleto: 'Junio 2024', ganancias: 4650, citas: 92, ticketPromedio: 50.54, nuevasClientas: 31, meta: 4200 },
-    { mes: 'Jul', mesCompleto: 'Julio 2024', ganancias: 4520, citas: 89, ticketPromedio: 50.78, nuevasClientas: 29, meta: 4300 },
-    { mes: 'Ago', mesCompleto: 'Agosto 2024', ganancias: 4210, citas: 83, ticketPromedio: 50.72, nuevasClientas: 24, meta: 4300 },
-    { mes: 'Sep', mesCompleto: 'Septiembre 2024', ganancias: 4700, citas: 91, ticketPromedio: 51.64, nuevasClientas: 34, meta: 4500 },
-    { mes: 'Oct', mesCompleto: 'Octubre 2024', ganancias: 4850, citas: 94, ticketPromedio: 51.59, nuevasClientas: 36, meta: 4600 },
-    { mes: 'Nov', mesCompleto: 'Noviembre 2024', ganancias: 5240, citas: 102, ticketPromedio: 51.37, nuevasClientas: 42, meta: 4800 },
-    { mes: 'Dic', mesCompleto: 'Diciembre 2024 (Proy.)', ganancias: 5980, citas: 115, ticketPromedio: 52.00, nuevasClientas: 48, meta: 5200 },
-  ];
+    // Calculate data from actual appointments context
+  const fullYearData = useMemo(() => {
+    // Initialize 12 months for the current year
+    const currentYear = new Date().getFullYear();
+    const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const monthNamesFull = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    
+    let baseData = months.map((m, i) => ({
+      mes: m,
+      mesCompleto: `${monthNamesFull[i]} ${currentYear}`,
+      ganancias: 0,
+      citas: 0,
+      ticketPromedio: 0,
+      nuevasClientas: 0,
+      meta: 3000 // default mock goal
+    }));
+
+    // Aggregate appointments
+    appointments.forEach(apt => {
+      if (apt.status === 'cancelada' || apt.status === 'no_asistio') return;
+      if (!apt.dateStr) return;
+      
+      const dateParts = apt.dateStr.split('-');
+      if (dateParts.length !== 3) return;
+      
+      const aptYear = parseInt(dateParts[0], 10);
+      const aptMonth = parseInt(dateParts[1], 10) - 1; // 0-indexed
+      
+      // Only count current year for simplicity in this MVP view
+      if (aptYear === currentYear && aptMonth >= 0 && aptMonth < 12) {
+        baseData[aptMonth].ganancias += (apt.price || 0);
+        baseData[aptMonth].citas += 1;
+        // Mocking new clients randomly for simplicity
+        baseData[aptMonth].nuevasClientas += Math.floor(Math.random() * 2); 
+      }
+    });
+    
+    // Calculate averages
+    baseData = baseData.map(d => ({
+      ...d,
+      ticketPromedio: d.citas > 0 ? d.ganancias / d.citas : 0
+    }));
+
+    return baseData;
+  }, [appointments]);
 
   // Filtered dataset according to timeframe
   const displayData = useMemo(() => {
