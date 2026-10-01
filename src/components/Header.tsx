@@ -84,7 +84,7 @@ export const Header: React.FC = () => {
                   title="Club Vernis Privilège: Ver puntos y canjear descuentos"
                 >
                   <span className="material-symbols-outlined text-[16px] text-amber-500">stars</span>
-                  <span>{loyaltyProfile.pointsBalance.toLocaleString()} pts</span>
+                  <span>{(currentClient?.pointsBalance || 0).toLocaleString()} pts</span>
                 </button>
               )}
 

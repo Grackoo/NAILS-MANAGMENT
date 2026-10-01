@@ -13,7 +13,7 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const { services, specialists, addReview } = useStudio();
+  const { services, specialists, addReview, addLoyaltyPoints } = useStudio();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -46,7 +46,7 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
 
   const samplePhotoPresets = [
     {
-      title: 'Acrílico Francés',
+      title: 'AcrÃ­lico FrancÃ©s',
       url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCsScb1PH9p0A1yCa_NtC4KHXUMuzR1Hm6gXPhRmFQUgvnWw01J5y33tKAVpC8vpneDmxxDVLg-xKXdv1P9MG5IWLRDB0o9UxheKZpde3pC_QI7Vp-dRfYAevI-cntSvEDVIHCt11FQtLef5jYP5xZaa2X9fNXf1l6VtfTTdUxrLUorKjb0LXmEUya6SmxrXTMHgcyONpJNqkPqfYxa4SvGueXc7nAp2lPHo8Py1Ctcwct2dY8XPw',
     },
     {
@@ -64,7 +64,7 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
     2: 'Aceptable',
     3: 'Bueno',
     4: 'Muy Bueno',
-    5: '¡Experiencia Excepcional!',
+    5: 'Â¡Experiencia Excepcional!',
   };
 
   const selectedServiceObj = services.find((s) => s.id === serviceId) || services[0];
@@ -77,13 +77,13 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
     const validFiles = Array.from(fileList).filter((file) => file.type.startsWith('image/'));
 
     if (validFiles.length === 0) {
-      setUploadError('Por favor selecciona archivos de imagen válidos (JPG, PNG, WebP).');
+      setUploadError('Por favor selecciona archivos de imagen vÃ¡lidos (JPG, PNG, WebP).');
       return;
     }
 
     validFiles.forEach((file) => {
       if (file.size > 8 * 1024 * 1024) {
-        setUploadError('Una de las fotos supera 8MB. Te sugerimos subir una foto más ligera.');
+        setUploadError('Una de las fotos supera 8MB. Te sugerimos subir una foto mÃ¡s ligera.');
         return;
       }
 
@@ -112,7 +112,7 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
     e.preventDefault();
 
     if (!comment.trim()) {
-      alert('Por favor escribe tu opinión para completar la reseña.');
+      alert('Por favor escribe tu opiniÃ³n para completar la reseÃ±a.');
       return;
     }
 
@@ -133,6 +133,14 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
       photos,
     });
 
+    const finalPrice = appointment?.price || selectedServiceObj.price;
+    const pointsEarned = Math.round(finalPrice * 10);
+    addLoyaltyPoints(
+      pointsEarned,
+      `Recompensa por reseña de servicio: ${selectedServiceObj.title}`,
+      selectedServiceObj.title
+    );
+
     if (onSuccess) onSuccess();
     onClose();
   };
@@ -145,13 +153,13 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
           <div>
             <div className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-[#725b38] tracking-widest">
               <span className="material-symbols-outlined text-[16px] text-amber-500">rate_review</span>
-              <span>Calificación Post-Tratamiento</span>
+              <span>CalificaciÃ³n Post-Tratamiento</span>
             </div>
             <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#1c1b1a]">
               Comparte tu Experiencia
             </h2>
             <p className="text-xs text-[#4c4640] mt-0.5">
-              Tu opinión permite perfeccionar cada detalle del atelier y orienta a otras clientas.
+              Tu opiniÃ³n permite perfeccionar cada detalle del atelier y orienta a otras clientas.
             </p>
           </div>
 
@@ -169,10 +177,10 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
           <span className="material-symbols-outlined text-[#725b38] text-[22px] shrink-0">stars</span>
           <div>
             <span className="font-bold text-[#584323] block">
-              +100 Puntos Vernis Privilège de Regalo
+              +100 Puntos Vernis PrivilÃ¨ge de Regalo
             </span>
             <span className="text-[11px] text-[#4c4640]">
-              Al publicar tu reseña verificada con fotos de tu manicura terminada.
+              Al publicar tu reseÃ±a verificada con fotos de tu manicura terminada.
             </span>
           </div>
         </div>
@@ -181,7 +189,7 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
           {/* Main Star Rating Selector */}
           <div className="bg-white p-4 rounded-2xl border border-[#cec5bd]/40 text-center space-y-2">
             <span className="text-[11px] uppercase tracking-wider font-bold text-[#1c1b1a] block">
-              Calificación General de la Sesión
+              CalificaciÃ³n General de la SesiÃ³n
             </span>
 
             <div className="flex items-center justify-center gap-2">
@@ -220,11 +228,11 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
             </span>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
-              {/* Aspect 1: Técnica */}
+              {/* Aspect 1: TÃ©cnica */}
               <div className="space-y-1">
                 <div className="flex justify-between text-[11px]">
-                  <span className="text-[#4c4640]">Técnica & Acabado</span>
-                  <span className="font-bold text-[#1c1b1a]">{aspectRatings.technique}★</span>
+                  <span className="text-[#4c4640]">TÃ©cnica & Acabado</span>
+                  <span className="font-bold text-[#1c1b1a]">{aspectRatings.technique}â˜…</span>
                 </div>
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((st) => (
@@ -244,7 +252,7 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
               <div className="space-y-1">
                 <div className="flex justify-between text-[11px]">
                   <span className="text-[#4c4640]">Higiene & Autoclave</span>
-                  <span className="font-bold text-[#1c1b1a]">{aspectRatings.hygiene}★</span>
+                  <span className="font-bold text-[#1c1b1a]">{aspectRatings.hygiene}â˜…</span>
                 </div>
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((st) => (
@@ -263,8 +271,8 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
               {/* Aspect 3: Trato */}
               <div className="space-y-1">
                 <div className="flex justify-between text-[11px]">
-                  <span className="text-[#4c4640]">Atención de Especialista</span>
-                  <span className="font-bold text-[#1c1b1a]">{aspectRatings.service}★</span>
+                  <span className="text-[#4c4640]">AtenciÃ³n de Especialista</span>
+                  <span className="font-bold text-[#1c1b1a]">{aspectRatings.service}â˜…</span>
                 </div>
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((st) => (
@@ -283,8 +291,8 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
               {/* Aspect 4: Durabilidad */}
               <div className="space-y-1">
                 <div className="flex justify-between text-[11px]">
-                  <span className="text-[#4c4640]">Durabilidad de Uñas</span>
-                  <span className="font-bold text-[#1c1b1a]">{aspectRatings.durability}★</span>
+                  <span className="text-[#4c4640]">Durabilidad de UÃ±as</span>
+                  <span className="font-bold text-[#1c1b1a]">{aspectRatings.durability}â˜…</span>
                 </div>
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((st) => (
@@ -338,13 +346,13 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
           {/* Review Text Comments */}
           <div className="space-y-1">
             <label className="text-[10px] uppercase font-bold text-[#4c4640] block">
-              Tu Testimonio / Opinión de la Cita
+              Tu Testimonio / OpiniÃ³n de la Cita
             </label>
             <textarea
               rows={3}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Cuéntanos sobre el acabado, los destellos, el limado de cutículas o el trato recibido..."
+              placeholder="CuÃ©ntanos sobre el acabado, los destellos, el limado de cutÃ­culas o el trato recibido..."
               className="w-full p-3 bg-white border border-[#cec5bd]/40 rounded-xl text-xs text-[#1c1b1a] outline-none focus:ring-1 focus:ring-[#725b38] resize-none"
               required
             />
@@ -358,7 +366,7 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
                   Fotos de tu Manicura Realizada ({photos.length})
                 </span>
                 <span className="text-[11px] text-[#4c4640]">
-                  Sube fotos del resultado para mostrar el brillo, relieve y técnica.
+                  Sube fotos del resultado para mostrar el brillo, relieve y tÃ©cnica.
                 </span>
               </div>
               <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-800 text-[10px] font-bold">
@@ -399,10 +407,10 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
                 <span className="material-symbols-outlined text-[22px]">add_a_photo</span>
               </div>
               <span className="text-xs font-bold text-[#1c1b1a]">
-                Haz clic para subir fotos o arrástralas aquí
+                Haz clic para subir fotos o arrÃ¡stralas aquÃ­
               </span>
               <span className="text-[10px] text-[#7d766f]">
-                Formatos: JPG, PNG, WebP (Cámara del móvil o carrete)
+                Formatos: JPG, PNG, WebP (CÃ¡mara del mÃ³vil o carrete)
               </span>
             </div>
 
@@ -416,7 +424,7 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
             <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
               {photos.map((url, idx) => (
                 <div key={idx} className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-[#cec5bd]/50 shrink-0 group">
-                  <img src={url} alt={`Uña ${idx + 1}`} className="w-full h-full object-cover" />
+                  <img src={url} alt={`UÃ±a ${idx + 1}`} className="w-full h-full object-cover" />
                   <button
                     type="button"
                     onClick={() => handleRemovePhoto(idx)}
@@ -433,7 +441,7 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
 
               {photos.length === 0 && (
                 <span className="text-xs text-[#7d766f] italic py-2">
-                  No has adjuntado fotos todavía.
+                  No has adjuntado fotos todavÃ­a.
                 </span>
               )}
             </div>
@@ -441,7 +449,7 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
             {/* Quick Presets / Attach samples */}
             <div className="space-y-1.5 pt-2 border-t border-[#f2edea]">
               <span className="text-[10px] text-[#4c4640] block font-medium">
-                O prueba añadiendo un set de muestra con un clic:
+                O prueba aÃ±adiendo un set de muestra con un clic:
               </span>
               <div className="flex items-center gap-2 flex-wrap">
                 {samplePhotoPresets.map((preset, i) => (
@@ -466,7 +474,7 @@ export const AddReviewModal: React.FC<AddReviewModalProps> = ({
               className="h-11 rounded-full bg-[#1e1b18] hover:bg-[#32302e] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-all"
             >
               <span className="material-symbols-outlined text-[16px] text-[#fedeb2]">send</span>
-              <span>Enviar Reseña (+100 pts)</span>
+              <span>Enviar ReseÃ±a (+100 pts)</span>
             </button>
             <button
               type="button"

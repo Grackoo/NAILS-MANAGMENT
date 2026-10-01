@@ -123,13 +123,6 @@ export const BookingFlow: React.FC = () => {
         }
       }
 
-      // Award points for the session
-      addLoyaltyPoints(
-        pointsEarned,
-        `Cita completada: ${selectedService.title} ($${finalPrice.toFixed(2)})`,
-        selectedService.title
-      );
-
       const newApt = addAppointment({
         time: selectedHour,
         durationText: `${Math.floor(selectedService.durationMinutes / 60)}h ${selectedService.durationMinutes % 60}m`,
@@ -826,7 +819,7 @@ export const BookingFlow: React.FC = () => {
             <span className="font-serif text-sm">${finalPrice.toFixed(2)} MXN</span>
           </div>
           <div className="flex items-center justify-between text-[11px] text-[#725b38] pt-0.5">
-            <span>Puntos que acumularás:</span>
+            <span>Puntos al dejar tu reseña:</span>
             <span className="font-semibold">+{pointsEarned} Pts Vernis</span>
           </div>
         </div>

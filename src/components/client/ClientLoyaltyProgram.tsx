@@ -18,7 +18,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
 
   // Next tier calculation
   const nextTierPoints = 2500;
-  const currentTierPoints = currentClient?.pointsBalance || currentTierPoints;
+  const currentTierPoints = currentClient?.pointsBalance || 0;
   const pointsRemaining = Math.max(0, nextTierPoints - currentTierPoints);
   const tierProgressPercent = Math.min(100, Math.round((currentTierPoints / nextTierPoints) * 100));
 
@@ -268,7 +268,7 @@ export const ClientLoyaltyProgram: React.FC = () => {
             </h3>
           </div>
           <span className="text-[11px] text-[#7d766f]">
-            Total histórico: <strong>{loyaltyProfile.totalPointsEarned} pts</strong>
+            Total histórico: <strong>{(currentClient?.pointsBalance || 0)} pts</strong>
           </span>
         </div>
 

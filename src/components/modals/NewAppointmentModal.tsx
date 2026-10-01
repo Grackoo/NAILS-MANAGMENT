@@ -96,7 +96,7 @@ export const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ onClos
                   required
                   value={clientPhone}
                   onChange={(e) => setClientPhone(e.target.value.replace(/\D/g, ''))}
-                  placeholder="10 d�gitos"
+                  placeholder="10 dígitos"
                   maxLength={10}
                   className="flex-1 w-full h-10 px-3 bg-white border border-[#cec5bd]/40 rounded-r-xl text-xs focus:outline-none focus:ring-1 focus:ring-[#725b38]"
                 />

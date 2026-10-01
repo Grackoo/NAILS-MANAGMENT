@@ -343,16 +343,14 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
     });
 
-    setClients((prev) =>
-      prev.map((c) =>
-        c.id === 'cl-1' || c.name.toLowerCase().includes('elena')
-          ? {
-              ...c,
-              pointsBalance: Math.max(0, (c.pointsBalance || 0) + points),
-            }
-          : c
-      )
-    );
+        if (currentClient) {
+      const updatedClient = {
+        ...currentClient,
+        pointsBalance: Math.max(0, (currentClient.pointsBalance || 0) + points),
+      };
+      setCurrentClient(updatedClient);
+      setClients((prev) => prev.map((cl) => (cl.id === currentClient.id ? updatedClient : cl)));
+    }
   };
 
   // Adjust points for any client from Admin directory

@@ -13,7 +13,7 @@ export const LoginScreen: React.FC = () => {
   const handleClientLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (!phone || phone.length < 10) {
-      setError('Por favor ingresa un n�mero de tel�fono v�lido (10 d�gitos).');
+      setError('Por favor ingresa un n�mero de teléfono válido (10 dígitos).');
       return;
     }
     const fullPhone = '+52' + phone;
@@ -22,7 +22,7 @@ export const LoginScreen: React.FC = () => {
     if (existing) {
        const expectedPwd = existing.name.split(' ')[0].toLowerCase() + phone.slice(-4);
        if (password !== expectedPwd) {
-         setError('Contrase�a incorrecta. Si eres nueva, inventa una.');
+         setError('Contraseña incorrecta. Si eres nueva, inventa una.');
          return;
        }
     } else {
@@ -90,7 +90,7 @@ export const LoginScreen: React.FC = () => {
             >
               <div>
                 <label className="block text-[10px] font-bold text-[#4c4640] uppercase tracking-wider mb-1.5">
-                  N�mero de Tel�fono
+                  Número de Teléfono
                 </label>
                 <div className="flex">
                   <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-[#cec5bd]/50 bg-[#f2edea] text-[#4c4640] text-sm font-semibold">
@@ -100,7 +100,7 @@ export const LoginScreen: React.FC = () => {
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-                    placeholder="10 d�gitos"
+                    placeholder="10 dígitos"
                     maxLength={10}
                     className="flex-1 w-full h-11 px-3 bg-[#f8f3f0] border border-[#cec5bd]/50 rounded-r-xl text-sm focus:outline-none focus:border-[#725b38] focus:ring-1 focus:ring-[#725b38] transition-all"
                   />
@@ -119,13 +119,13 @@ export const LoginScreen: React.FC = () => {
                 />
               <div>
                 <label className="block text-[10px] font-bold text-[#4c4640] uppercase tracking-wider mb-1.5">
-                  Contrase�a (Obligatoria si ya tienes cuenta)
+                  Contraseña (Obligatoria si ya tienes cuenta)
                 </label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Tu contrase�a"
+                  placeholder="Tu contraseña"
                   className="w-full h-11 px-4 bg-[#f8f3f0] border border-[#cec5bd]/50 rounded-xl text-sm focus:outline-none focus:border-[#725b38] focus:ring-1 focus:ring-[#725b38] transition-all"
                 />
               </div>
